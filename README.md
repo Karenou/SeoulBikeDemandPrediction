@@ -1,6 +1,15 @@
 # SeoulBikeDemandPrediction
 MSBD5003 course project
 
+-----
+Required packages
+- Pyspark
+- Pandas
+- Matplotlib
+- Sklearn
+
+-----
+
 1. Set up connection to virtual machine on Microsoft Azure
 ```
 # Generate ssh private and public key
