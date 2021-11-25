@@ -65,7 +65,7 @@ if __name__ == "__main__":
                                         )
     pred_df = final_pred.select(label_col, "prediction").toPandas()
 
-    pred_df = pd.concat([_id, pred_df], axis=1).resset_index(drop=True)
+    pred_df = pd.concat([_id, pred_df], axis=1).reset_index(drop=True)
     pred_df = pred_df.sort_values(["Row"])
 
     pred_df.to_csv("./data/final_pred.csv")
