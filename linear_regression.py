@@ -30,7 +30,7 @@ def linear_regression(train_df, val_df, test_df, label_col, params):
     # tune hyperparameter
     best_model = None
     best_param = None
-    best_rmse = 0
+    best_rmse = float('inf')
     grid = ParameterGrid(params)
 
     for param in grid:

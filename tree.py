@@ -27,24 +27,24 @@ def random_forest(train_df, val_df, test_df, label_col, params):
     # tune hyperparameter
     best_model = None
     best_param = None
-    best_r2 = 0
+    best_rmse = float('inf')
     grid = ParameterGrid(params)
 
     for param in grid:
         print(param)
         rf = RandomForestRegressor(featuresCol = "features", labelCol = label_col, predictionCol = "prediction", **param)                           
         model = rf.fit(train_df)
-        _, _, r2 = evaluate_tree(model, val_df, mode="eval")
+        _, rmse, r2 = evaluate_tree(model, val_df, mode="eval")
 
-        if r2 > best_r2:
+        if rmse < best_rmse:
             best_param = param
-            best_r2 = r2
+            best_rmse = rmse
             best_model = model
 
     # print out result
     print("chosen hyperparameters", best_param)
-    _, train_mse, train_r2 = evaluate_tree(best_model, train_df)
-    _, test_mse, test_r2 = evaluate_tree(best_model, test_df)
+    _, train_mse, train_r2 = evaluate_tree(best_model, train_df, mode="Train")
+    _, test_mse, test_r2 = evaluate_tree(best_model, test_df, mode="Test")
     print("Random forest model results:")
     print("Train set, RMSE: %.2f, R2 : %.2f" % (train_mse, train_r2))
     print("Test set, RMSE: %.2f, R2 : %.2f" % (test_mse, test_r2))
@@ -61,7 +61,7 @@ def gradient_boosting_tree(data, feature_col, label_col, params):
     # tune hyperparameter
     best_model = None
     best_param = None
-    best_rmse = 0
+    best_rmse = float('inf')
     grid = ParameterGrid(params)
 
     for param in grid:
@@ -77,8 +77,8 @@ def gradient_boosting_tree(data, feature_col, label_col, params):
 
     # print out result
     print("chosen hyperparameters", best_param)
-    _, train_mse, train_r2 = evaluate_tree(best_model, train_df, "Train")
-    _, test_mse, test_r2 = evaluate_tree(best_model, test_df, "Test")
+    _, train_mse, train_r2 = evaluate_tree(best_model, train_df, mode="Train")
+    _, test_mse, test_r2 = evaluate_tree(best_model, test_df, mode="Test")
     print("GBDT model results:")
     print("Train set, RMSE: %.2f, R2 : %.2f" % (train_mse, train_r2))
     print("Test set, RMSE: %.2f, R2 : %.2f" % (test_mse, test_r2))

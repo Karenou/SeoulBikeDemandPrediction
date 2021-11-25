@@ -11,7 +11,7 @@ if __name__ == "__main__":
                         .master("local") \
                         .appName("RentBikeCountPrediction") \
                         .getOrCreate()
-    # 
+ 
     prop = {'user': 'root',
         'password': '！Bigdata5003',
         'driver': 'com.mysql.cj.jdbc.Driver'}
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     }
 
     lr_best_param, lr_model = linear_regression(train_df, val_df, test_df, label_col, lr_params)
-    lr_model.save("model/lr.model")
+    lr_model.save("./model/lr.model")
 
     tree_params = {
         "numTrees": [100, 120, 150],
@@ -46,10 +46,10 @@ if __name__ == "__main__":
     }
 
     rf_best_param, rf_model = random_forest(train_df, val_df, test_df, label_col, tree_params)
-    rf_model.save("model/rf.model")
+    rf_model.save("./model/rf.model")
 
     gbdt_best_param, gbdt_model = gradient_boosting_tree(train_df, val_df, test_df, label_col, tree_params)
-    gbdt_model.save("model/gbdt.model")
+    gbdt_model.save("./model/gbdt.model")
 
     # generate prediction by ensembling rf and gbdt
     rf_pred = rf_model.transform(model_df.select("features", label_col))
@@ -68,4 +68,4 @@ if __name__ == "__main__":
     pred_df = pd.concat([_id, pred_df], axis=1).resset_index(drop=True)
     pred_df = pred_df.sort_values(["Row"])
 
-    pred_df.to_csv("final_pred.csv")
+    pred_df.to_csv("./data/final_pred.csv")
